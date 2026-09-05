@@ -14,7 +14,7 @@ IGNORED = {".git", ".venv", "venv", "__pycache__", ".pytest_cache", "node_module
 TEXT_SUFFIXES = {".py", ".md", ".json", ".txt", ".yml", ".yaml"}
 REQUIRED = {
     ".github/workflows/test.yml", ".gitignore", "CONTRIBUTING.md", "LICENSE",
-    "README.md", "README.zh-CN.md", "SECURITY.md", "SKILL.md",
+    "README.md", "README.en.md", "SECURITY.md", "SKILL.md",
     "agents/openai.yaml", "requirements.txt",
     "assets/formal-style.json", "assets/pack-config.example.json",
     "assets/pack-config.schema.json", "examples/selected-handbook.json",
