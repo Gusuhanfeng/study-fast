@@ -1,0 +1,35 @@
+{
+  "default": "formal_zh_cn",
+  "templates": {
+    "formal_zh_cn": {
+      "label": "Chinese formal A4",
+      "page": {
+        "size": "A4",
+        "orientation": "portrait",
+        "margins_cm": {"top": 2.54, "bottom": 2.54, "left": 3.18, "right": 3.18}
+      },
+      "fonts": {"cjk": "SimSun", "latin": "Times New Roman"},
+      "colors": {"text": "000000", "background": "FFFFFF", "border": "000000"},
+      "typography": {
+        "title_pt": 22, "subtitle_pt": 14, "heading_1_pt": 16,
+        "heading_2_pt": 14, "heading_3_pt": 12, "body_pt": 12,
+        "note_pt": 10, "code_pt": 9.5, "body_line_spacing": 1.5
+      }
+    },
+    "formal_cross_platform": {
+      "label": "Cross-platform formal A4",
+      "page": {
+        "size": "A4",
+        "orientation": "portrait",
+        "margins_cm": {"top": 2.54, "bottom": 2.54, "left": 3.18, "right": 3.18}
+      },
+      "fonts": {"cjk": "Noto Serif CJK SC", "latin": "Liberation Serif"},
+      "colors": {"text": "000000", "background": "FFFFFF", "border": "000000"},
+      "typography": {
+        "title_pt": 22, "subtitle_pt": 14, "heading_1_pt": 16,
+        "heading_2_pt": 14, "heading_3_pt": 12, "body_pt": 12,
+        "note_pt": 10, "code_pt": 9.5, "body_line_spacing": 1.5
+      }
+    }
+  }
+}

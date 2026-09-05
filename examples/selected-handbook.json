@@ -1,0 +1,50 @@
+{
+  "scene": "knowledge_point",
+  "topic": "事务隔离级别",
+  "template": "formal_cross_platform",
+  "meta": {
+    "subtitle": "Focused review handbook",
+    "date": "",
+    "scene_label": "Knowledge point",
+    "language": "en"
+  },
+  "selection": {
+    "output_mode": "selected",
+    "requested_documents": ["study_handbook"],
+    "practice_needed": false,
+    "practice_reason": "The user requested one conceptual handbook without practical exercises."
+  },
+  "privacy": {
+    "mode": "balanced",
+    "prohibited_terms": []
+  },
+  "evidence": [],
+  "documents": [
+    {
+      "document_type": "study_handbook",
+      "filename": "transaction-isolation-handbook.docx",
+      "title": "Transaction Isolation Study Handbook",
+      "subtitle": "Concepts boundaries and review questions",
+      "sections": [
+        {
+          "title": "Learning goals",
+          "content": [
+            {
+              "type": "paragraph",
+              "text": "Explain what transaction isolation controls and distinguish verified facts from assumptions."
+            },
+            {
+              "type": "checklist",
+              "items": ["Explain the main anomalies", "Compare isolation levels", "State one implementation caveat"]
+            },
+            {
+              "type": "qa",
+              "question": "Why does transaction isolation matter?",
+              "answer": "It controls which concurrent effects a transaction may observe. A complete answer should connect the selected level to the anomalies it prevents and the performance or implementation tradeoffs it may introduce."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

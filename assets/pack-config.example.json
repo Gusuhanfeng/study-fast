@@ -1,0 +1,134 @@
+{
+  "scene": "knowledge_point",
+  "topic": "缓存一致性基础",
+  "template": "formal_zh_cn",
+  "meta": {
+    "subtitle": "快速理解、主动回忆与表达准备",
+    "date": "",
+    "scene_label": "知识点速学",
+    "language": "zh-CN"
+  },
+  "selection": {
+    "output_mode": "full_pack",
+    "practice_needed": false,
+    "practice_reason": "当前目标是理解和表达概念，没有代码、实验或技术操作要求。"
+  },
+  "privacy": {
+    "mode": "balanced",
+    "prohibited_terms": []
+  },
+  "evidence": [
+    {
+      "id": "E01",
+      "status": "UNKNOWN",
+      "claim": "缓存一致性的权威定义和适用边界尚待核验。",
+      "source": "待补充可靠课程材料或官方资料"
+    }
+  ],
+  "documents": [
+    {
+      "document_type": "study_handbook",
+      "filename": "01-study-handbook.docx",
+      "title": "缓存一致性快速学习手册",
+      "subtitle": "结构化知识地图与复习清单",
+      "sections": [
+        {
+          "title": "学习目标与证据边界",
+          "content": [
+            {
+              "type": "evidence_table",
+              "ids": ["E01"]
+            },
+            {
+              "type": "paragraph",
+              "text": "目标是在有限时间内区分缓存一致性、缓存失效和并发控制，并能够解释常见读写策略。当前示例只展示文档结构，不代表任何个人项目经历。"
+            },
+            {
+              "type": "table",
+              "headers": ["内容", "当前状态", "准备动作"],
+              "rows": [
+                ["核心术语", "UNKNOWN", "从可靠材料核验定义"],
+                ["典型方案", "UNKNOWN", "比较适用条件和失败模式"]
+              ],
+              "widths": [1.5, 1.5, 3]
+            }
+          ]
+        },
+        {
+          "title": "核心概念地图",
+          "content": [
+            {
+              "type": "bullets",
+              "items": [
+                "缓存解决访问成本问题，但会引入副本过期风险。",
+                "一致性策略需要在新鲜度、可用性、复杂度和成本之间权衡。"
+              ]
+            },
+            {
+              "type": "note",
+              "text": "正式任务必须把示例内容替换为当前材料中的已核验事实。"
+            }
+          ]
+        },
+        {
+          "title": "主动回忆与行动计划",
+          "content": [
+            {
+              "type": "qa",
+              "question": "为什么缓存会产生一致性问题？",
+              "answer": "因为同一信息存在多个副本，而更新、传播和读取发生在不同时间与路径上。"
+            },
+            {
+              "type": "checklist",
+              "items": [
+                "能用一分钟解释问题背景",
+                "能比较两种策略的适用条件",
+                "能说明至少一个失败模式"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "document_type": "teaching_narrative",
+      "filename": "02-teaching-narrative.docx",
+      "title": "缓存一致性老师讲解稿",
+      "subtitle": "从学习者视角理解原理与边界",
+      "sections": [
+        {
+          "title": "为什么需要讨论一致性",
+          "content": [
+            {
+              "type": "paragraph",
+              "text": "你可以先把缓存理解成放在手边的一份数据副本。它让读取更快，但副本不会天然知道原始数据何时发生了变化。理解缓存一致性的起点不是背策略名称，而是先看见这个时间差：更新已经发生，某些读取路径却仍可能拿到旧内容。"
+            },
+            {
+              "type": "paragraph",
+              "text": "接下来我们沿着一次更新慢慢往下看。先问谁负责更新或删除缓存，再看数据库成功而缓存操作失败时会发生什么，最后判断系统允许旧数据存在多久。这样学习时，你记住的不是孤立方案，而是一条从写入、传播、读取到恢复的完整因果链。"
+            }
+          ]
+        },
+        {
+          "title": "如何向别人解释",
+          "content": [
+            {
+              "type": "heading",
+              "level": 2,
+              "text": "一分钟版本"
+            },
+            {
+              "type": "paragraph",
+              "text": "缓存通过保存副本减少访问成本，但副本可能落后于权威数据。所谓一致性策略，就是决定何时更新或删除副本、允许何种短暂差异，以及失败后如何修复。"
+            },
+            {
+              "type": "qa",
+              "question": "哪一种方案最好？",
+              "answer": "没有脱离约束的最佳方案；需要结合读写比例、新鲜度要求、失败模型和运维成本进行选择。"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
