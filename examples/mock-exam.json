@@ -1,0 +1,75 @@
+{
+  "scene": "exam_prep",
+  "topic": "基础概率",
+  "selection": {
+    "output_mode": "selected",
+    "requested_documents": [
+      "mock_exam"
+    ],
+    "practice_needed": false,
+    "practice_reason": "书面题库，不需要运行代码。"
+  },
+  "privacy": {
+    "mode": "balanced",
+    "prohibited_terms": []
+  },
+  "evidence": [
+    {
+      "id": "E1",
+      "status": "INFERRED",
+      "claim": "合成的概率练习，用于展示题库结构。",
+      "source": "合成示例"
+    }
+  ],
+  "documents": [
+    {
+      "document_type": "mock_exam",
+      "filename": "mock-exam.docx",
+      "title": "概率模拟卷",
+      "sections": [
+        {
+          "title": "一、计算题",
+          "content": [
+            {
+              "type": "qa",
+              "question": "公平硬币正面朝上的概率是多少？",
+              "answer": "正反两种结果等可能，正面概率为二分之一。",
+              "origin": "inferred",
+              "evidence_ids": [
+                "E1"
+              ],
+              "question_blocks": [
+                {
+                  "type": "table",
+                  "headers": [
+                    "结果",
+                    "数量"
+                  ],
+                  "rows": [
+                    [
+                      "正面",
+                      1
+                    ],
+                    [
+                      "反面",
+                      1
+                    ]
+                  ]
+                }
+              ],
+              "answer_blocks": [
+                {
+                  "type": "equation",
+                  "omml": "<m:oMath xmlns:m=\"http://schemas.openxmlformats.org/officeDocument/2006/math\"><m:f><m:num><m:r><m:t>1</m:t></m:r></m:num><m:den><m:r><m:t>2</m:t></m:r></m:den></m:f></m:oMath>"
+                }
+              ],
+              "points": 10
+            }
+          ]
+        }
+      ],
+      "duration_minutes": 10,
+      "total_points": 10
+    }
+  ]
+}

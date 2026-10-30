@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build a selective, privacy-safe study pack with a fixed black-and-white DOCX template."""
+"""Build a selective, privacy-safe study pack with a deterministic academic DOCX template."""
 
 from __future__ import annotations
 
@@ -12,6 +12,7 @@ from pathlib import Path
 
 from common import (
     collect_strings,
+    resolve_layout,
     filename_error,
     get_template,
     load_style_catalog,
@@ -34,11 +35,11 @@ SCENES = {
     "knowledge_point", "exam_prep", "job_interview", "work_onboarding",
     "weekly_progress", "meeting_prep",
 }
-DOCUMENT_TYPES = {"study_handbook", "teaching_narrative", "practice_guide"}
+DOCUMENT_TYPES = {"study_handbook", "teaching_narrative", "practice_guide", "question_bank", "mock_exam"}
 REQUIRED_TYPES = {"study_handbook", "teaching_narrative"}
 BLOCK_TYPES = {
     "heading", "paragraph", "bullets", "numbered", "table", "code",
-    "note", "qa", "checklist", "evidence_table", "page_break",
+    "note", "qa", "checklist", "evidence_table", "page_break", "equation",
 }
 LATIN_FONT = "Times New Roman"
 CJK_FONT = "SimSun"
@@ -78,7 +79,8 @@ def validate_block(block, prefix, errors):
         "numbered": {"type", "items"},
         "checklist": {"type", "items"},
         "table": {"type", "headers", "rows", "widths"},
-        "qa": {"type", "question", "answer"},
+        "qa": {"type", "question", "answer", "question_blocks", "answer_blocks", "evidence_ids", "origin", "points"},
+        "equation": {"type", "omml"},
         "evidence_table": {"type", "ids"},
         "page_break": {"type"},
     }[block_type]
@@ -115,7 +117,28 @@ def validate_block(block, prefix, errors):
                 errors.append(prefix + ".widths must match the header width.")
             elif not all(isinstance(item, (int, float)) and item > 0 for item in widths):
                 errors.append(prefix + ".widths values must be positive numbers.")
+    if block_type == "equation":
+        try:
+            parse_math(block.get("omml"))
+        except (ValueError, TypeError) as exc:
+            errors.append(prefix + ".omml: " + str(exc))
     if block_type == "qa":
+        if block.get("origin", "inferred") not in {"source", "variant", "inferred"}:
+            errors.append(prefix + ".origin is unsupported.")
+        if "points" in block and (type(block["points"]) not in (int, float) or not 0 < block["points"] < float("inf")):
+            errors.append(prefix + ".points must be positive and finite.")
+        if "evidence_ids" in block and (not isinstance(block["evidence_ids"], list) or not all(isinstance(x, str) for x in block["evidence_ids"])):
+            errors.append(prefix + ".evidence_ids must be a list of strings.")
+        for field in ("question_blocks", "answer_blocks"):
+            children = block.get(field, [])
+            if not isinstance(children, list):
+                errors.append(prefix + "." + field + " must be a list.")
+                continue
+            for i, child in enumerate(children):
+                if not isinstance(child, dict) or child.get("type") not in {"paragraph", "equation", "table", "code"}:
+                    errors.append(prefix + "." + field + " supports paragraph, equation, table and code only.")
+                else:
+                    validate_block(child, prefix + "." + field + str(i), errors)
         if not isinstance(block.get("question"), str) or not block.get("question", "").strip():
             errors.append(prefix + ".question must be a non-empty string.")
         if not isinstance(block.get("answer"), str) or not block.get("answer", "").strip():
@@ -244,7 +267,7 @@ def validate_config(config):
         if not isinstance(document, dict):
             errors.append(prefix + " must be an object.")
             continue
-        unsupported_document = set(document) - {"document_type", "filename", "title", "subtitle", "sections"}
+        unsupported_document = set(document) - {"document_type", "filename", "title", "subtitle", "sections", "layout", "duration_minutes", "total_points"}
         if unsupported_document:
             errors.append(prefix + " contains unsupported fields: " + ", ".join(sorted(unsupported_document)))
         doc_type = document.get("document_type")
@@ -267,7 +290,16 @@ def validate_config(config):
                 errors.append(prefix + ".%s must be a string." % field)
         if not document.get("title", "").strip():
             errors.append(prefix + ".title must be non-empty.")
+        try:
+            resolve_layout(document)
+        except ValueError as exc:
+            errors.append(prefix + ": " + str(exc))
+        if doc_type == "mock_exam":
+            for field in ("duration_minutes", "total_points"):
+                if type(document.get(field)) not in (int, float) or not 0 < document[field] < float("inf"):
+                    errors.append(prefix + "." + field + " must be positive and finite.")
         document_block_types = []
+        question_points = []
         sections = document.get("sections")
         if not isinstance(sections, list) or not sections:
             errors.append(prefix + ".sections must be a non-empty list.")
@@ -287,6 +319,11 @@ def validate_config(config):
                 errors.append(section_prefix + ".content must be a list.")
                 continue
             for block_index, block in enumerate(blocks):
+                if isinstance(block, dict) and block.get("type") == "qa":
+                    question_points.append(block.get("points", 0))
+                    for evidence_id in block.get("evidence_ids", []) if isinstance(block.get("evidence_ids", []), list) else []:
+                        if evidence_id not in evidence_ids:
+                            errors.append(section_prefix + " references unknown evidence ID " + str(evidence_id))
                 validate_block(block, "%s.content[%d]" % (section_prefix, block_index), errors)
                 if isinstance(block, dict) and block.get("type") in BLOCK_TYPES:
                     document_block_types.append(block["type"])
@@ -298,6 +335,12 @@ def validate_config(config):
                             errors.append("%s references unknown evidence ID %s." % (section_prefix, evidence_id))
         if doc_type == "study_handbook" and "qa" not in document_block_types:
             errors.append(prefix + " study_handbook must include at least one qa block with a question and answer.")
+        if doc_type in {"question_bank", "mock_exam"}:
+            if not question_points:
+                errors.append(prefix + " requires answered qa blocks.")
+            if doc_type == "mock_exam" and all(type(x) in (int, float) for x in question_points):
+                if any(x <= 0 for x in question_points) or sum(question_points) != document.get("total_points"):
+                    errors.append(prefix + " question points must sum to total_points.")
         if doc_type == "teaching_narrative":
             paragraph_count = document_block_types.count("paragraph")
             outline_count = sum(document_block_types.count(item) for item in (
@@ -326,6 +369,85 @@ def validate_config(config):
     if not prohibited:
         warnings.append("privacy.prohibited_terms is empty; add task-specific identifiers when private inputs are used.")
     return errors, warnings
+
+
+def parse_math(xml):
+    from lxml import etree
+    if not isinstance(xml, str) or "<!" in xml:
+        raise ValueError("Provide OMML without declarations, DTDs or entities.")
+    try:
+        node = etree.fromstring(xml.encode("utf-8"), etree.XMLParser(resolve_entities=False, no_network=True))
+    except etree.XMLSyntaxError as exc:
+        raise ValueError("Invalid OMML XML") from exc
+    if node.tag != qn("m:oMath"):
+        raise ValueError("Root must be m:oMath.")
+    for child in node.iter():
+        if not isinstance(child.tag, str) or not child.tag.startswith(qn("m:oMath").split("}")[0] + "}"):
+            raise ValueError("Only math namespace elements are supported.")
+    if not node.findall(".//" + qn("m:t")):
+        raise ValueError("Equation must contain mathematical text.")
+    required = {"f": ("num", "den"), "sSub": ("e", "sub"), "sSup": ("e", "sup"), "sSubSup": ("e", "sub", "sup")}
+    for element in node.iter():
+        for tag in required.get(element.tag.split("}")[-1], ()):
+            if element.find(qn("m:" + tag)) is None:
+                raise ValueError("Incomplete math structure: " + element.tag.split("}")[-1])
+        if element.tag == qn("m:m"):
+            widths = [len(row.findall(qn("m:e"))) for row in element.findall(qn("m:mr"))]
+            if not widths or not widths[0] or len(set(widths)) != 1:
+                raise ValueError("Matrix must be non-empty and rectangular.")
+    return node
+
+
+def set_indent(paragraph, enabled, body_pt=12):
+    paragraph.paragraph_format.first_line_indent = Pt(2 * body_pt if enabled else 0)
+    paragraph._p.get_or_add_pPr().get_or_add_ind().set(qn("w:firstLineChars"), "200" if enabled else "0")
+
+
+def color_math_and_text(element, color):
+    paragraphs = list(element.iter(qn("w:p")))
+    for paragraph in paragraphs:
+        props = paragraph.find(qn("w:pPr"))
+        if props is None:
+            props = OxmlElement("w:pPr")
+            paragraph.insert(0, props)
+        style = props.find(qn("w:pStyle"))
+        if style is None:
+            style = OxmlElement("w:pStyle")
+            props.insert(0, style)
+        style.set(qn("w:val"), "SFQuestion")
+    for run in element.iter(qn("w:r")):
+        props = run.find(qn("w:rPr"))
+        if props is None:
+            props = OxmlElement("w:rPr")
+            run.insert(0, props)
+        node = props.find(qn("w:color"))
+        if node is None:
+            node = OxmlElement("w:color")
+            props.append(node)
+        node.set(qn("w:val"), color)
+    for run in element.iter(qn("m:r")):
+        props = OxmlElement("w:rPr")
+        node = OxmlElement("w:color")
+        node.set(qn("w:val"), color)
+        props.append(node)
+        run.insert(0, props)
+
+
+def apply_table_style(table, mode):
+    if mode == "grid":
+        return
+    borders = table._tbl.tblPr.find(qn("w:tblBorders"))
+    for border in borders:
+        edge = border.tag.split("}")[-1]
+        border.set(qn("w:val"), "single" if edge in {"top", "bottom"} else "nil")
+        border.set(qn("w:sz"), "12")
+    for cell in table.rows[0].cells:
+        borders = OxmlElement("w:tcBorders")
+        bottom = OxmlElement("w:bottom")
+        for key, value in (("val", "single"), ("sz", "6"), ("color", "000000")):
+            bottom.set(qn("w:" + key), value)
+        borders.append(bottom)
+        cell._tc.get_or_add_tcPr().append(borders)
 
 
 def set_run_font(run, size=12, bold=False, italic=False):
@@ -464,6 +586,8 @@ class FormalDocumentBuilder:
         LATIN_FONT = self.template["fonts"]["latin"]
         CJK_FONT = self.template["fonts"]["cjk"]
         self.typography = self.template["typography"]
+        self.layout = resolve_layout(document_config)
+        self.question_number = 0
         language = pack.get("meta", {}).get("language", "zh-CN")
         self.labels = LABELS[language]
         self.doc = Document()
@@ -480,8 +604,13 @@ class FormalDocumentBuilder:
         section.right_margin = Cm(margins["right"])
         section.header_distance = Cm(1.5)
         section.footer_distance = Cm(1.5)
-        section.different_first_page_header_footer = True
+        section.different_first_page_header_footer = self.layout["cover"]
         styles = self.doc.styles
+        from docx.enum.style import WD_STYLE_TYPE
+        question_style = styles.add_style("SFQuestion", WD_STYLE_TYPE.PARAGRAPH)
+        question_style.base_style = styles["Normal"]
+        body_style = styles.add_style("SFBody", WD_STYLE_TYPE.PARAGRAPH)
+        body_style.base_style = styles["Normal"]
         typography = self.typography
         style_specs = {
             "Normal": (typography["body_pt"], False, 0, 6, typography["body_line_spacing"]),
@@ -493,6 +622,8 @@ class FormalDocumentBuilder:
             "List Bullet": (typography["body_pt"], False, 0, 4, typography["body_line_spacing"]),
             "List Number": (typography["body_pt"], False, 0, 4, typography["body_line_spacing"]),
         }
+        style_specs["SFQuestion"] = style_specs["Normal"]
+        style_specs["SFBody"] = style_specs["Normal"]
         for name, (size, bold, before, after, spacing) in style_specs.items():
             style = styles[name]
             set_style_font(style, size, bold)
@@ -504,7 +635,7 @@ class FormalDocumentBuilder:
                 inherited_decoration = style_p_pr.find(qn("w:" + tag))
                 if inherited_decoration is not None:
                     style_p_pr.remove(inherited_decoration)
-        styles["Normal"].paragraph_format.first_line_indent = Cm(0.74)
+        styles["Normal"].paragraph_format.first_line_indent = Pt(0)
         self.doc.core_properties.title = self.config["title"]
         self.doc.core_properties.subject = self.config["document_type"]
         self.doc.core_properties.category = self.template_name
@@ -512,11 +643,16 @@ class FormalDocumentBuilder:
         self.doc.core_properties.last_modified_by = ""
         self.doc.core_properties.keywords = ""
         self.doc.core_properties.comments = ""
+        for tag in ("created", "modified"):
+            node = self.doc.core_properties._element.find(qn("dcterms:" + tag))
+            if node is not None:
+                self.doc.core_properties._element.remove(node)
         header = section.header.paragraphs[0]
         header.alignment = WD_ALIGN_PARAGRAPH.CENTER
         header.paragraph_format.space_after = Pt(0)
-        run = header.add_run(self.config["title"])
-        set_run_font(run, size=9)
+        if self.layout["header"]:
+            run = header.add_run(self.config["title"])
+            set_run_font(run, size=9)
         footer = section.footer.paragraphs[0]
         footer.alignment = WD_ALIGN_PARAGRAPH.CENTER
         footer.paragraph_format.space_before = Pt(0)
@@ -577,8 +713,10 @@ class FormalDocumentBuilder:
         set_run_font(run, size=self.typography[key], bold=True)
 
     def add_paragraph(self, text, bold=False, first_indent=True, size=None):
-        paragraph = self.doc.add_paragraph()
-        paragraph.paragraph_format.first_line_indent = Cm(0.74) if first_indent else None
+        paragraph = self.doc.add_paragraph(style="SFBody" if first_indent else "Normal")
+        if first_indent:
+            paragraph.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
+        set_indent(paragraph, first_indent, self.typography["body_pt"])
         run = paragraph.add_run(text)
         set_run_font(run, size=size or self.typography["body_pt"], bold=bold)
         return paragraph
@@ -599,6 +737,7 @@ class FormalDocumentBuilder:
         widths = [round(CONTENT_WIDTH_DXA * float(weight) / total) for weight in weights]
         widths[-1] += CONTENT_WIDTH_DXA - sum(widths)
         set_table_geometry(table, widths)
+        apply_table_style(table, self.layout["table_style"])
         for row_index, values in enumerate([headers] + rows):
             for column_index, value in enumerate(values):
                 cell = table.rows[row_index].cells[column_index]
@@ -635,19 +774,29 @@ class FormalDocumentBuilder:
         run = paragraph.add_run(text)
         set_run_font(run, size=self.typography["note_pt"])
 
-    def add_qa(self, question, answer):
+    def add_equation(self, omml):
         paragraph = self.doc.add_paragraph()
-        paragraph.paragraph_format.first_line_indent = None
-        label = paragraph.add_run(self.labels["question"] + ": ")
-        set_run_font(label, bold=True)
-        run = paragraph.add_run(question)
-        set_run_font(run)
-        paragraph = self.doc.add_paragraph()
-        paragraph.paragraph_format.first_line_indent = Cm(0.74)
-        label = paragraph.add_run(self.labels["answer"] + ": ")
-        set_run_font(label, bold=True)
-        run = paragraph.add_run(answer)
-        set_run_font(run)
+        paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        set_indent(paragraph, False)
+        paragraph._p.append(parse_math(omml))
+
+    def add_qa(self, block, answer_only=False):
+        self.question_number += 1
+        if not answer_only:
+            start = len(self.doc._element.body)
+            paragraph = self.add_paragraph(str(self.question_number) + ". " + block["question"], first_indent=False)
+            paragraph.paragraph_format.keep_with_next = True
+            if "points" in block:
+                set_run_font(paragraph.add_run(" (%s)" % block["points"]))
+            for child in block.get("question_blocks", []):
+                self.process_block(child)
+            for element in list(self.doc._element.body)[start-1:-1]:
+                color_math_and_text(element, self.layout["question_color"])
+        if self.layout["answer_mode"] == "adjacent" or answer_only:
+            prefix = (str(self.question_number) + ". " if answer_only else "") + self.labels["answer"] + ": "
+            self.add_paragraph(prefix + block["answer"])
+            for child in block.get("answer_blocks", []):
+                self.process_block(child)
 
     def add_evidence_table(self, ids=None):
         evidence = self.pack.get("evidence", [])
@@ -682,17 +831,35 @@ class FormalDocumentBuilder:
         elif block_type == "note":
             self.add_note(block["text"])
         elif block_type == "qa":
-            self.add_qa(block["question"], block["answer"])
+            self.add_qa(block)
+        elif block_type == "equation":
+            self.add_equation(block["omml"])
         elif block_type == "page_break":
             self.doc.add_page_break()
 
     def build(self):
-        self.add_cover()
-        self.add_toc()
+        if self.layout["cover"]:
+            self.add_cover()
+        else:
+            title = self.doc.add_paragraph(style="Title")
+            title.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            set_run_font(title.add_run(self.config["title"]), size=self.typography["title_pt"], bold=True)
+        if self.config["document_type"] == "mock_exam":
+            self.add_paragraph(("时长：%s 分钟　满分：%s 分" if self.pack.get("meta", {}).get("language", "zh-CN") == "zh-CN" else "%s min | %s points") % (self.config["duration_minutes"], self.config["total_points"]), first_indent=False)
+        if self.layout["toc"]:
+            self.add_toc()
         for section in self.config["sections"]:
             self.add_heading(section["title"], 1)
             for block in section["content"]:
                 self.process_block(block)
+        if self.layout["answer_mode"] == "separate":
+            self.doc.add_page_break()
+            self.add_heading(self.labels["answer"], 1)
+            self.question_number = 0
+            for section in self.config["sections"]:
+                for block in section["content"]:
+                    if block["type"] == "qa":
+                        self.add_qa(block, answer_only=True)
         return self.doc
 
 

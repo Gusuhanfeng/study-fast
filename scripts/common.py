@@ -116,3 +116,21 @@ def filename_error(filename):
     if filename[-1] in {" ", "."}:
         return "must not end with a space or period."
     return None
+
+
+def resolve_layout(document):
+    assessment = document.get("document_type") in {"question_bank", "mock_exam"}
+    defaults = {"header": False, "cover": not assessment, "toc": not assessment,
+                "table_style": "three_line", "question_color": "1F4E79" if assessment else "000000",
+                "answer_mode": "separate" if document.get("document_type") == "mock_exam" else "adjacent"}
+    layout = document.get("layout", {})
+    if not isinstance(layout, dict) or set(layout) - set(defaults):
+        raise ValueError("layout contains unsupported fields or is not an object.")
+    result = dict(defaults, **layout)
+    if any(not isinstance(result[k], bool) for k in ("header", "cover", "toc")):
+        raise ValueError("header, cover and toc must be booleans.")
+    if result["table_style"] not in {"three_line", "grid"} or result["question_color"] not in {"000000", "1F4E79"}:
+        raise ValueError("Unsupported table_style or question_color.")
+    if result["answer_mode"] not in {"adjacent", "separate"}:
+        raise ValueError("answer_mode must be adjacent or separate; every question requires an answer.")
+    return result
