@@ -1,4 +1,4 @@
 interface:
   display_name: "Study Fast"
-  short_description: "生成问题答案手册与老师视角的耐心讲解稿"
-  default_prompt: "Use $study-fast to create a question-and-answer study handbook and a patient teacher-style explanation from my materials."
+  short_description: "生成独立教材、连贯知识讲解及按需题库与实操"
+  default_prompt: "Use $study-fast to create a self-contained study handbook and connected explanatory reader, with question banks or practical exercises when requested from my materials."

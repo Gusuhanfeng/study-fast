@@ -4,47 +4,108 @@
   "title": "Study Fast pack configuration",
   "type": "object",
   "additionalProperties": false,
-  "required": ["scene", "topic", "selection", "privacy", "documents"],
+  "required": [
+    "scene",
+    "topic",
+    "selection",
+    "privacy",
+    "documents"
+  ],
   "properties": {
     "scene": {
-      "enum": ["knowledge_point", "exam_prep", "job_interview", "work_onboarding", "weekly_progress", "meeting_prep"]
+      "enum": [
+        "knowledge_point",
+        "exam_prep",
+        "job_interview",
+        "work_onboarding",
+        "weekly_progress",
+        "meeting_prep"
+      ]
     },
-    "topic": {"type": "string", "minLength": 1},
-    "template": {"enum": ["formal_zh_cn", "formal_cross_platform"]},
+    "topic": {
+      "type": "string",
+      "minLength": 1
+    },
+    "template": {
+      "enum": [
+        "formal_zh_cn",
+        "formal_cross_platform"
+      ]
+    },
     "meta": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "subtitle": {"type": "string"},
-        "date": {"type": "string"},
-        "scene_label": {"type": "string"},
-        "language": {"enum": ["zh-CN", "en"]}
+        "subtitle": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string"
+        },
+        "scene_label": {
+          "type": "string"
+        },
+        "language": {
+          "enum": [
+            "zh-CN",
+            "en"
+          ]
+        }
       }
     },
     "selection": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["practice_needed", "practice_reason"],
+      "required": [
+        "practice_needed",
+        "practice_reason"
+      ],
       "properties": {
-        "output_mode": {"enum": ["full_pack", "selected"]},
+        "output_mode": {
+          "enum": [
+            "full_pack",
+            "selected"
+          ]
+        },
         "requested_documents": {
           "type": "array",
           "minItems": 1,
           "uniqueItems": true,
-          "items": {"enum": ["study_handbook", "teaching_narrative", "practice_guide"]}
+          "items": {
+            "enum": [
+              "study_handbook",
+              "teaching_narrative",
+              "practice_guide",
+              "question_bank",
+              "mock_exam"
+            ]
+          }
         },
-        "practice_needed": {"type": "boolean"},
-        "practice_reason": {"type": "string", "minLength": 1}
+        "practice_needed": {
+          "type": "boolean"
+        },
+        "practice_reason": {
+          "type": "string",
+          "minLength": 1
+        }
       }
     },
     "privacy": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "mode": {"enum": ["balanced", "strict"]},
+        "mode": {
+          "enum": [
+            "balanced",
+            "strict"
+          ]
+        },
         "prohibited_terms": {
           "type": "array",
-          "items": {"type": "string", "minLength": 1}
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
         }
       }
     },
@@ -53,49 +114,482 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["id", "status", "claim", "source"],
+        "required": [
+          "id",
+          "status",
+          "claim",
+          "source"
+        ],
         "properties": {
-          "id": {"type": "string", "minLength": 1},
-          "status": {"enum": ["VERIFIED", "USER_STATED", "INFERRED", "UNKNOWN"]},
-          "claim": {"type": "string", "minLength": 1},
-          "source": {"type": "string", "minLength": 1}
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "enum": [
+              "VERIFIED",
+              "USER_STATED",
+              "INFERRED",
+              "UNKNOWN"
+            ]
+          },
+          "claim": {
+            "type": "string",
+            "minLength": 1
+          },
+          "source": {
+            "type": "string",
+            "minLength": 1
+          }
         }
       }
     },
     "documents": {
       "type": "array",
       "minItems": 1,
-      "items": {"$ref": "#/$defs/document"}
+      "items": {
+        "$ref": "#/$defs/document"
+      }
     }
   },
   "$defs": {
     "document": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["document_type", "filename", "title", "sections"],
+      "required": [
+        "document_type",
+        "filename",
+        "title",
+        "sections"
+      ],
       "properties": {
-        "document_type": {"enum": ["study_handbook", "teaching_narrative", "practice_guide"]},
-        "filename": {"type": "string", "pattern": "\\.docx$"},
-        "title": {"type": "string", "minLength": 1},
-        "subtitle": {"type": "string"},
+        "document_type": {
+          "enum": [
+            "study_handbook",
+            "teaching_narrative",
+            "practice_guide",
+            "question_bank",
+            "mock_exam"
+          ]
+        },
+        "filename": {
+          "type": "string",
+          "pattern": "\\.docx$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "subtitle": {
+          "type": "string"
+        },
         "sections": {
           "type": "array",
           "minItems": 1,
-          "items": {"$ref": "#/$defs/section"}
+          "items": {
+            "$ref": "#/$defs/section"
+          }
+        },
+        "layout": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "header": {
+              "type": "boolean"
+            },
+            "cover": {
+              "type": "boolean"
+            },
+            "toc": {
+              "type": "boolean"
+            },
+            "table_style": {
+              "enum": [
+                "three_line",
+                "grid"
+              ]
+            },
+            "question_color": {
+              "enum": [
+                "000000",
+                "1F4E79"
+              ]
+            },
+            "answer_mode": {
+              "enum": [
+                "adjacent",
+                "separate"
+              ]
+            }
+          }
+        },
+        "duration_minutes": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "total_points": {
+          "type": "number",
+          "exclusiveMinimum": 0
         }
       }
     },
     "section": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["title", "content"],
+      "required": [
+        "title",
+        "content"
+      ],
       "properties": {
-        "title": {"type": "string", "minLength": 1},
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
         "content": {
           "type": "array",
-          "items": {"type": "object", "required": ["type"]}
+          "items": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/heading"
+              },
+              {
+                "$ref": "#/$defs/paragraph"
+              },
+              {
+                "$ref": "#/$defs/code"
+              },
+              {
+                "$ref": "#/$defs/note"
+              },
+              {
+                "$ref": "#/$defs/bullets"
+              },
+              {
+                "$ref": "#/$defs/numbered"
+              },
+              {
+                "$ref": "#/$defs/checklist"
+              },
+              {
+                "$ref": "#/$defs/table"
+              },
+              {
+                "$ref": "#/$defs/equation"
+              },
+              {
+                "$ref": "#/$defs/page_break"
+              },
+              {
+                "$ref": "#/$defs/evidence_table"
+              },
+              {
+                "$ref": "#/$defs/qa"
+              }
+            ]
+          }
         }
       }
+    },
+    "heading": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "text"
+      ],
+      "properties": {
+        "type": {
+          "const": "heading"
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1
+        },
+        "level": {
+          "enum": [
+            2,
+            3
+          ]
+        }
+      }
+    },
+    "paragraph": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "text"
+      ],
+      "properties": {
+        "type": {
+          "const": "paragraph"
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1
+        },
+        "bold": {
+          "type": "boolean"
+        },
+        "first_indent": {
+          "type": "boolean"
+        }
+      }
+    },
+    "code": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "text"
+      ],
+      "properties": {
+        "type": {
+          "const": "code"
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "note": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "text"
+      ],
+      "properties": {
+        "type": {
+          "const": "note"
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "bullets": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "items"
+      ],
+      "properties": {
+        "type": {
+          "const": "bullets"
+        },
+        "items": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "numbered": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "items"
+      ],
+      "properties": {
+        "type": {
+          "const": "numbered"
+        },
+        "items": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "checklist": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "items"
+      ],
+      "properties": {
+        "type": {
+          "const": "checklist"
+        },
+        "items": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "table": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "headers",
+        "rows"
+      ],
+      "properties": {
+        "type": {
+          "const": "table"
+        },
+        "headers": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": [
+                "string",
+                "number",
+                "boolean"
+              ]
+            }
+          }
+        },
+        "widths": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          }
+        }
+      }
+    },
+    "equation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "omml"
+      ],
+      "properties": {
+        "type": {
+          "const": "equation"
+        },
+        "omml": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "page_break": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "const": "page_break"
+        }
+      }
+    },
+    "evidence_table": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "const": "evidence_table"
+        },
+        "ids": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "qa": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "question",
+        "answer"
+      ],
+      "properties": {
+        "type": {
+          "const": "qa"
+        },
+        "question": {
+          "type": "string",
+          "minLength": 1
+        },
+        "answer": {
+          "type": "string",
+          "minLength": 1
+        },
+        "origin": {
+          "enum": [
+            "source",
+            "variant",
+            "inferred"
+          ]
+        },
+        "evidence_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "points": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "question_blocks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/rich_block"
+          }
+        },
+        "answer_blocks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/rich_block"
+          }
+        }
+      }
+    },
+    "rich_block": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/paragraph"
+        },
+        {
+          "$ref": "#/$defs/table"
+        },
+        {
+          "$ref": "#/$defs/code"
+        },
+        {
+          "$ref": "#/$defs/equation"
+        }
+      ]
     }
   }
 }
