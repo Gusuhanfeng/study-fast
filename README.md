@@ -4,9 +4,9 @@
 
 ### 从一叠材料，到真正学懂、独立作答。
 
-教材式学习手册 · 连贯知识讲解 · 题库与模拟卷 · 面试与实操
+教材式学习手册 · 连贯知识讲解 · 题库与模拟卷 · 实操指南 · 单文件 HTML 刷题
 
-[English](README.en.md) · [快速开始](#快速开始) · [使用示例](#直接描述你的目标)
+[English](README.en.md) · [全部输出](#可以生成哪些成品) · [快速开始](#快速开始) · [使用示例](#直接描述你的目标)
 
 ![Codex Skill](https://img.shields.io/badge/Codex-Skill-111827?style=flat-square)
 ![Python 3.9+](https://img.shields.io/badge/Python-3.9%2B-3776AB?style=flat-square)
@@ -21,21 +21,40 @@ Study Fast 将课件、教材、作业、岗位 JD 或项目材料，组织成�
 
 **学懂原理，用知识讲解；系统查阅，用学习手册；检验掌握，用题库与实操。**
 
-## 两份核心文档，三种按需拓展
+## 可以生成哪些成品
 
 两份核心文档相辅相成，也能独立阅读。考试与面试训练是拓展分支，不替代系统学习。
 
-| 文档 | 阅读体验 | 解决的问题 |
-| :--- | :--- | :--- |
-| **学习手册** | 教材式结构，包含必要基础、定义、公式、例子与边界 | 系统学全约定范围，随时查阅与补缺 |
-| **知识讲解** | 少标题、连贯段落，从直觉逐步走到机制和应用 | 理解为什么这样做，跟上完整思路 |
-| **题库** | 按题型或能力分组，题目与答案对应 | 闭卷练习，适应条件变化与追问 |
-| **模拟卷** | 完整题面、分值配置与集中答案 | 按考试结构演练，检查答题表现 |
-| **实操指南** | 代码、SQL、实验、调试或系统设计任务 | 把理解转化为可执行、可复现的操作 |
+提供 **5类 Word 文档 + 1类单文件 HTML**。下列名称是成品类型，可按课程或岗位改名。
+
+| 成品 | 格式 / 类型标识 | 内容与用途 | 何时生成 |
+| :--- | :--- | :--- | :--- |
+| **学习手册** | `.docx` · `study_handbook` | 教材式结构，必要基础、定义、公式、推导、完整例题与边界；系统查阅与补缺 | 默认核心文档 |
+| **知识讲解** | `.docx` · `teaching_narrative` | 连贯解释，从直觉走到机制和应用；帮助独立理解，不是手册的重复提纲 | 默认核心文档 |
+| **题库与参考答案** | `.docx` · `question_bank` | 按题型或能力分组；题干与必要解题过程对应，可用于课程题、面试问答与追问 | 按需选择 |
+| **模拟试卷** | `.docx` · `mock_exam` | 完整题面、考试时长、核对后的分值及参考答案；按考试结构演练 | 按需选择 |
+| **实操指南** | `.docx` · `practice_guide` | 代码、SQL、实验、调试或系统设计任务，含环境、完整解法与验证结果 | 确需实操且开启 `practice_needed` |
+| **交互刷题页** | 单个 `.html` · `interactive_quiz` | 分类、搜索、题号跳转、顺序/随机、隐藏答案、自评、错题重练、本地进度及主动导入导出 | 按需启用，可单独生成 |
 
 默认生成两份核心文档；只有确实需要技术操作时才增加实操指南。也可以只选题库、模拟卷，或明确指定任意组合。
 
-另有按需启用的 **离线 HTML 刷题模块**：分类、顺序/随机、先答后揭晓、自评、错题重练、本地进度与导入导出。可独立生成，也可附加到 Word 学习资料；默认不开启。使用 [模块说明](references/interactive-quiz.md) 和 [示例题库](examples/interactive-quiz.json)，不依赖网页服务或联网。
+### HTML 交付：只有一个文件
+
+题库、样式和脚本全部内嵌；双击即可离线使用，**无需附带 JSON、图片、字体、脚本或资源文件夹，也无需部署服务**。电脑宽屏使用侧边导航，窄屏默认收起设置，让题目优先显示。进度保存在浏览器中；“导出进度”是使用者主动选择的备份，不是运行所需文件。
+
+HTML 的自评不能当作客观正确率；临时草稿切题保留、刷新清空。当前模板显示纯文本、换行与 Unicode 符号，不直接渲染 LaTeX/Markdown。详细能力和限制见 [交互刷题模块](references/interactive-quiz.md)。Word 的页面、字体和原生公式规则不直接套用于网页。
+
+### 按目标选择组合
+
+| 目标 | 建议输出 | 文件数 |
+| :--- | :--- | :--- |
+| 系统学懂一门课 | 学习手册 + 知识讲解 | 2份 Word |
+| 课程应试与反复刷题 | 学习手册 + 知识讲解 + 题库 + HTML | 3份 Word + 1个 HTML |
+| 只做一次模拟考试 | 模拟卷 | 1份 Word |
+| 只想在电脑或手机刷题 | HTML | 1个 HTML |
+| 面试准备，涉及编程 | 手册 + 知识讲解 + 面试题库 + 实操指南；需要时加 HTML | 4份 Word，可加1个 HTML |
+
+五类 Word 和 HTML 都可以按需选择；**不会默认生成全部6种成品**。HTML 使用独立生成入口，不属于 Word 配置中的第六种文档类型。
 
 ```mermaid
 flowchart LR
@@ -46,10 +65,12 @@ flowchart LR
     C --> F{需要专项训练？}
     F -->|考试备考| G[题库 · 模拟卷]
     F -->|面试与技术操作| H[面试题 · 实操指南]
+    F -->|交互刷题| J[单文件 HTML]
     D --> I[内容核验 · 版式审计 · 逐页检查]
     E --> I
     G --> I
     H --> I
+    J --> K[离线运行 · 浏览器交互 · 宽窄屏检查]
 ```
 
 ## 从理解到独立作答
@@ -137,6 +158,22 @@ python -m pip install -r requirements.txt
 保留已有配色、缩进与页眉设置，不要用旧脚本覆盖我的修改。
 ```
 
+**只生成单文件刷题页**
+
+```text
+用 $study-fast 根据这些资料生成 HTML 刷题页，不生成 Word。
+只能交付一个 HTML，所有题库和资源内嵌，断网可用。
+按章节分类，先隐藏答案，自评后可重练薄弱题。
+```
+
+**Word 配套 HTML**
+
+```text
+用 $study-fast 生成学习手册、知识讲解、题库与参考答案，
+再附一个单文件 HTML 刷题页。总共3份 Word + 1个 HTML。
+Word与网页中的题目和参考答案保持一致，不另附必需资源。
+```
+
 <details>
 <summary><strong>命令行与配置：生成、审计和自检</strong></summary>
 
@@ -147,6 +184,7 @@ python -m pip install -r requirements.txt
 | [核心文档](assets/pack-config.example.json) | 学习手册与知识讲解 |
 | [题库](examples/question-bank.json) | 按题型组织题目与答案 |
 | [模拟卷](examples/mock-exam.json) | 题目、分值与集中答案 |
+| [交互刷题](examples/interactive-quiz.json) | 单文件 HTML 的内部题库配置，独立于 Word 配置 |
 
 ```bash
 python scripts/build_pack.py --config examples/question-bank.json --check-only
@@ -155,6 +193,15 @@ python scripts/audit_docx.py ../study-output/question-bank.docx --config example
 python scripts/self_check.py
 python -m unittest discover -s tests -v
 ```
+
+只生成离线 HTML（生成后向读者交付 `quiz.html` 即可）：
+
+```bash
+python scripts/build_quiz.py --config examples/interactive-quiz.json --check-only
+python scripts/build_quiz.py --config examples/interactive-quiz.json --output ../study-output/quiz.html
+```
+
+HTML 生成器只依赖 Python 标准库。内部数据字段见 [刷题 Schema](assets/interactive-quiz.schema.json)；不把这份配置传给 Word 生成器。两种生成器默认都拒绝覆盖已有成品。
 
 `full_pack` 保持两份核心文档，按需要增加实操；`selected` 用于明确选择文档组合。理论题库不要求开启 `practice_needed`。
 
@@ -185,6 +232,7 @@ python -m unittest discover -s tests -v
 | [SKILL.md](SKILL.md) | 技能入口与工作流程 |
 | [学习设计](references/learning-design.md) | 两份核心文档如何互补并保持独立 |
 | [应试与实操](references/assessment-design.md) | 题库、模拟卷与技术实践的设计规则 |
+| [交互刷题](references/interactive-quiz.md) | 单文件 HTML 的生成、交互、进度和离线验收 |
 | [固定版式](references/formal-document-template.md) | 字体、缩进、三线表与公式规范 |
 | [场景手册](references/scenario-playbooks.md) | 不同学习与准备任务的组织方式 |
 | [贡献指南](CONTRIBUTING.md) · [安全说明](SECURITY.md) | 开发验证与隐私边界 |

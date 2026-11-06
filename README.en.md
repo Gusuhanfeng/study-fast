@@ -2,13 +2,11 @@
 
 # Study Fast
 
-Optional offline HTML quiz practice is available on request, independently or alongside Word outputs. It supports categories, sequential/random sessions, hidden answers, self-assessment, review sessions and local progress import/export. See the [module contract](references/interactive-quiz.md) and [sample bank](examples/interactive-quiz.json). It is not enabled by default.
-
 ### Turn a stack of materials into understanding you can use.
 
-Learning handbooks · Explanatory readers · Question banks & mock exams · Practical preparation
+Learning handbooks · Explanatory readers · Question banks & mock exams · Practice guides · Single-file HTML quizzes
 
-[简体中文](README.md) · [Quick start](#quick-start) · [Examples](#describe-your-goal)
+[简体中文](README.md) · [All outputs](#available-outputs) · [Quick start](#quick-start) · [Examples](#describe-your-goal)
 
 ![Codex Skill](https://img.shields.io/badge/Codex-Skill-111827?style=flat-square)
 ![Python 3.9+](https://img.shields.io/badge/Python-3.9%2B-3776AB?style=flat-square)
@@ -23,19 +21,40 @@ Study Fast turns course slides, textbooks, assignments, job descriptions and pro
 
 **Understand with the reader. Look things up in the handbook. Check your skills through questions and practice.**
 
-## Two core documents, three optional extensions
+## Available outputs
 
 The core documents complement each other and remain independently readable. Assessment and practical preparation extend the learning workflow.
 
-| Document | Experience | Purpose |
-| :--- | :--- | :--- |
-| **Learning handbook** | Textbook structure with prerequisites, definitions, equations, examples and limitations | Cover the agreed scope and revisit gaps |
-| **Explanatory reader** | Connected prose with few headings, moving from intuition to mechanisms | Follow a complete explanation |
-| **Question bank** | Questions and answers grouped by type or competency | Practise recall, variations and follow-up questions |
-| **Mock exam** | Questions, checked point totals and a separate answer section | Rehearse an exam structure |
-| **Practice guide** | Code, SQL, experiments, debugging or system design | Execute or reproduce technical work |
+There are **five Word output types and one standalone HTML module**. Output filenames can reflect the course or role.
+
+| Output | Format / identifier | Contents and purpose | Selection |
+| :--- | :--- | :--- | :--- |
+| **Learning handbook** | `.docx` · `study_handbook` | Prerequisites, definitions, equations, derivations, worked examples and limitations | Default core document |
+| **Explanatory reader** | `.docx` · `teaching_narrative` | Connected explanations from intuition to mechanisms and applications | Default core document |
+| **Question bank and answers** | `.docx` · `question_bank` | Questions grouped by type or competency, with the required solution steps; includes interview follow-ups | On request |
+| **Mock exam** | `.docx` · `mock_exam` | Questions, duration, checked point totals and reference answers | On request |
+| **Practice guide** | `.docx` · `practice_guide` | Code, SQL, experiments, debugging or system design, with environment, solutions and verification | When technical practice is needed and `practice_needed` is enabled |
+| **Interactive quiz** | One `.html` · `interactive_quiz` | Categories, search, numbered navigation, sequential/random sessions, hidden answers, self-assessment, review and local progress | Opt-in; can be generated alone |
 
 The default pack contains the two core documents, adding a practice guide only when technical practice is needed. You can also request individual documents or an explicit combination.
+
+### HTML means one self-contained file
+
+The bank, styles and scripts are embedded. Open the HTML directly while offline: no accompanying JSON, images, fonts, scripts, resource folders or server are required. Wide screens show side navigation; narrow screens collapse settings so the question comes first. Progress lives in the browser; exporting a backup is an optional user action, not a runtime dependency.
+
+Self-assessment is not objective grading. Drafts survive question navigation within the page but are cleared on refresh. The current template handles plain text, line breaks and Unicode, without built-in LaTeX or Markdown rendering. See the [quiz contract](references/interactive-quiz.md). Word typography and native-equation rules do not automatically apply to HTML.
+
+### Choose a combination
+
+| Goal | Outputs | Files |
+| :--- | :--- | :--- |
+| Learn a course | Handbook + reader | 2 Word files |
+| Exam preparation with repeated practice | Handbook + reader + question bank + HTML | 3 Word files + 1 HTML |
+| One mock exam | Mock exam | 1 Word file |
+| Browser practice only | HTML | 1 HTML |
+| Interview preparation involving coding | Handbook + reader + interview question bank + practice guide; optionally HTML | 4 Word files, optionally 1 HTML |
+
+All five Word types and the HTML module are selectable; all six outputs are never generated by default. HTML uses a separate entry point and is not a sixth type in the Word configuration schema.
 
 ```mermaid
 flowchart LR
@@ -46,10 +65,12 @@ flowchart LR
     C --> F{Specialist preparation?}
     F -->|Exams| G[Question bank · Mock exam]
     F -->|Interviews and technical work| H[Interview questions · Practice guide]
+    F -->|Interactive practice| J[Single-file HTML]
     D --> I[Content checks · Layout audit · Page review]
     E --> I
     G --> I
     H --> I
+    J --> K[Offline execution · Browser interaction · Responsive checks]
 ```
 
 ## From understanding to independent answers
@@ -113,10 +134,23 @@ Read my latest manually edited Word document before revising it.
 Preserve its colors, indentation and header settings; do not overwrite it with an old generator.
 ```
 
+```text
+Use $study-fast to generate only an interactive quiz from these materials, without Word files.
+Deliver exactly one self-contained HTML that works offline, with embedded questions and resources.
+Group questions by chapter, hide answers initially and support review of weak topics.
+```
+
+```text
+Use $study-fast to create a handbook, reader and question bank, plus one offline HTML quiz.
+Deliver 3 Word files and 1 HTML. Keep shared questions and reference answers consistent.
+```
+
 <details>
 <summary><strong>CLI and configuration</strong></summary>
 
 Start with the [core example](assets/pack-config.example.json), [question-bank example](examples/question-bank.json), or [mock-exam example](examples/mock-exam.json). These demonstrate the configuration interface, not complete course content.
+
+The [interactive quiz example](examples/interactive-quiz.json) is a separate internal configuration for HTML.
 
 ```bash
 python scripts/build_pack.py --config examples/question-bank.json --check-only
@@ -125,6 +159,15 @@ python scripts/audit_docx.py ../study-output/question-bank.docx --config example
 python scripts/self_check.py
 python -m unittest discover -s tests -v
 ```
+
+Build only the offline quiz and deliver just `quiz.html`:
+
+```bash
+python scripts/build_quiz.py --config examples/interactive-quiz.json --check-only
+python scripts/build_quiz.py --config examples/interactive-quiz.json --output ../study-output/quiz.html
+```
+
+The HTML generator needs only the Python standard library. See the [quiz schema](assets/interactive-quiz.schema.json); do not pass this configuration to the Word generator. Both generators reject overwriting existing artifacts by default.
 
 `full_pack` preserves the two core outputs plus practice when needed. `selected` supports explicitly requested combinations. Theory question banks do not require `practice_needed=true`.
 
@@ -155,6 +198,7 @@ Read the latest artifact before editing it. Preserve manual changes and report c
 | [SKILL.md](SKILL.md) | Skill entry point and workflow |
 | [Learning design](references/learning-design.md) | Complementary, independently readable core documents |
 | [Assessment design](references/assessment-design.md) | Question banks, mock exams and practical preparation |
+| [Interactive quiz](references/interactive-quiz.md) | Single-file HTML generation, interaction, progress and offline checks |
 | [Document layout](references/formal-document-template.md) | Fonts, indentation, tables and equations |
 | [Scenario playbooks](references/scenario-playbooks.md) | Task-specific preparation workflows |
 | [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md) | Development checks and privacy boundaries |

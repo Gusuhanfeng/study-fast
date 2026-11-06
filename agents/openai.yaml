@@ -1,4 +1,4 @@
 interface:
   display_name: "Study Fast"
-  short_description: "生成独立教材、连贯知识讲解及按需题库与实操"
-  default_prompt: "Use $study-fast to create a self-contained study handbook and connected explanatory reader, with question banks or practical exercises when requested from my materials."
+  short_description: "生成学习手册与连贯知识讲解，按需附题库、模拟卷、实操及单文件HTML刷题"
+  default_prompt: "Use $study-fast to create a study handbook and explanatory reader from my materials, with question banks, mock exams, practice guides or a self-contained offline HTML quiz when requested."
