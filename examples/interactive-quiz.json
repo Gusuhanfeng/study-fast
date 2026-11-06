@@ -1,0 +1,19 @@
+{
+  "bank_id": "sample-learning-quiz",
+  "title": "学习自测",
+  "questions": [
+    {
+      "id": "concept-01",
+      "category": "概念与理解",
+      "question": "请用自己的话解释本节核心概念，并举一个例子。",
+      "answer": "这是界面演示题。实际使用时替换为经过核对的参考答案。",
+      "criteria": ["定义包含必要条件", "例子与定义一致"]
+    },
+    {
+      "id": "practice-01",
+      "category": "方法与应用",
+      "question": "给出解决本节典型问题的步骤，以及检查结果的方法。",
+      "answer": "列出已知条件，选择适用方法，完成关键步骤，再检查结果。"
+    }
+  ]
+}

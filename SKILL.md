@@ -1,6 +1,6 @@
 ---
 name: study-fast
-description: Build an evidence-grounded learning handbook and connected explanatory reader, with optional exam question banks, mock exams and interview or coding practice from course, job or project materials. Use for learning and preparation; ordinary format repairs do not require rebuilding the pack.
+description: Build an evidence-grounded learning handbook and connected explanatory reader, with optional question banks, mock exams, offline HTML quiz practice and interview or coding practice from course, job or project materials. Use for learning and preparation; ordinary format repairs do not require rebuilding the pack.
 ---
 
 # Study Fast
@@ -17,6 +17,8 @@ description: Build an evidence-grounded learning handbook and connected explanat
 - `selected` 的 `requested_documents` 精确选择输出，可单选或组合五种类型：上述三种及 `question_bank`、`mock_exam`。需要核心文档加题库时也使用此模式。
 - 理论题库、行为面试题不要求 `practice_needed=true`；该开关仅用于代码、SQL、实验、调试、系统设计等实操指南。
 - 不为了凑数量生成文档，不代用户考试、面试、发送或发布内容。
+
+用户要求网页刷题、交互自测或离线刷题时，启用可选 `interactive_quiz` 模块，读取 [交互刷题](references/interactive-quiz.md)。交付为单个自包含 HTML，所有题库和资源内嵌，无附带文件或联网依赖。它可独立生成，也可随 Word 文档附加；默认不生成，不占五种 Word 文档类型，不要求 `practice_needed=true`。只要求 HTML 时不生成 Word。该模块使用内部题库 JSON 和独立生成器，不把 HTML 配置传给 `build_pack.py`。
 
 读取 [输出契约](references/output-contract.md)；核心文档另读 [学习设计](references/learning-design.md)，题库、模拟卷或面试实操另读 [应试与实操](references/assessment-design.md)。
 

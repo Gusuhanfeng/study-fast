@@ -2,6 +2,8 @@
 
 # Study Fast
 
+Optional offline HTML quiz practice is available on request, independently or alongside Word outputs. It supports categories, sequential/random sessions, hidden answers, self-assessment, review sessions and local progress import/export. See the [module contract](references/interactive-quiz.md) and [sample bank](examples/interactive-quiz.json). It is not enabled by default.
+
 ### Turn a stack of materials into understanding you can use.
 
 Learning handbooks · Explanatory readers · Question banks & mock exams · Practical preparation
