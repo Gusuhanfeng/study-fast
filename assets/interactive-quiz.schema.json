@@ -15,9 +15,20 @@
         "properties": {
           "id": {"type": "string", "minLength": 1},
           "category": {"type": "string", "minLength": 1},
+          "title": {"type": "string", "minLength": 1},
           "question": {"type": "string", "minLength": 1},
           "answer": {"type": "string", "minLength": 1},
-          "criteria": {"type": "array", "items": {"type": "string", "minLength": 1}}
+          "criteria": {"type": "array", "items": {"type": "string", "minLength": 1}},
+          "learning": {
+            "type": "object", "additionalProperties": false, "minProperties": 1,
+            "properties": {
+              "concept": {"type": "string", "minLength": 1},
+              "method": {"type": "string", "minLength": 1},
+              "explanation": {"type": "string", "minLength": 1},
+              "example": {"type": "string", "minLength": 1},
+              "pitfalls": {"type": "string", "minLength": 1}
+            }
+          }
         }
       }
     }

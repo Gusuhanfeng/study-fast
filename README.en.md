@@ -42,6 +42,8 @@ The default pack contains the two core documents, adding a practice guide only w
 
 The bank, styles and scripts are embedded. Open the HTML directly while offline: no accompanying JSON, images, fonts, scripts, resource folders or server are required. Wide screens show side navigation; narrow screens collapse settings so the question comes first. Progress lives in the browser; exporting a backup is an optional user action, not a runtime dependency.
 
+The default interface uses **device system fonts** for headings, body text and controls, with normal-weight question text and separately collapsible numbered navigation. Optional per-question `title` and `learning` fields add a short heading and collapsible help below the prompt: concepts, working method, explanations, worked examples and pitfalls. Missing fields produce no empty panels; existing configurations remain valid. Teaching content must be authored from evidence; the template does not infer knowledge or difficulty. Browser math fonts may be used for properly structured equations without changing the system font for interface text.
+
 Self-assessment is not objective grading. Drafts survive question navigation within the page but are cleared on refresh. The current template handles plain text, line breaks and Unicode, without built-in LaTeX or Markdown rendering. See the [quiz contract](references/interactive-quiz.md). Word typography and native-equation rules do not automatically apply to HTML.
 
 ### Choose a combination

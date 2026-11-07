@@ -34,6 +34,8 @@
 
 独立的可选 HTML 输出，不是 Word 文档类型。可只生成一个 HTML，或在所选 Word 文档之外附加；不要求 `practice_needed=true`。资源必须全部内嵌，运行不依赖相邻文件或联网。功能、内部 JSON 接口和验收见 [交互刷题](interactive-quiz.md)。Word 配置中的 `requested_documents` 仍只接受五种文档类型，HTML 使用 `build_quiz.py`。
 
+默认设备系统字体、题目优先布局、响应式设置区与折叠题号导航；每题可选 `title` 和纯文本 `learning` 教学字段。Word 固定字体不应用于HTML，数学公式结构另行保证。旧题库配置继续兼容。
+
 ## 输出选择与独立性
 
 默认 full_pack 仍是手册+知识讲解，实操按需。selected 可任意选择上述类型，声明列表必须与实际输出相等。题库是增加的分支，不替代两份核心文档；不强制每次生成五份。

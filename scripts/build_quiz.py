@@ -24,7 +24,7 @@ def validate(data):
         raise ValueError('questions must be a nonempty array.')
     seen = set()
     for q in data['questions']:
-        if not isinstance(q, dict) or not {'id', 'category', 'question', 'answer'} <= set(q) or set(q) - {'id', 'category', 'question', 'answer', 'criteria'}:
+        if not isinstance(q, dict) or not {'id', 'category', 'question', 'answer'} <= set(q) or set(q) - {'id', 'category', 'question', 'answer', 'criteria', 'title', 'learning'}:
             raise ValueError('Invalid question fields.')
         if not all(nonempty(q[k]) for k in ('id', 'category', 'question', 'answer')):
             raise ValueError('Question fields must not be blank.')
@@ -33,6 +33,13 @@ def validate(data):
         seen.add(q['id'])
         if 'criteria' in q and (not isinstance(q['criteria'], list) or not all(nonempty(x) for x in q['criteria'])):
             raise ValueError('criteria must contain nonblank strings.')
+        if 'title' in q and not nonempty(q['title']):
+            raise ValueError('title must be a nonblank string.')
+        if 'learning' in q:
+            learning = q['learning']
+            fields = {'concept', 'method', 'explanation', 'example', 'pitfalls'}
+            if not isinstance(learning, dict) or not learning or set(learning) - fields or not all(nonempty(x) for x in learning.values()):
+                raise ValueError('learning must contain supported nonblank text fields.')
     return data
 
 

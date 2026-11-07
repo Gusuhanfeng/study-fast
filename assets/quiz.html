@@ -4,40 +4,130 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>__QUIZ_TITLE__</title>
 <style>
-
-:root{color-scheme:light;--bg:#f3f1eb;--paper:#fffefb;--text:#202f2c;--muted:#67726d;--line:#dcded5;--accent:#166651;--soft:#e8f0e9;--warn:#a1542b;--radius:14px}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.75 "Microsoft YaHei","PingFang SC",sans-serif}button,input,select,textarea{font:inherit;color:inherit}button,summary,select{cursor:pointer}button{border:1px solid var(--line);background:var(--paper);border-radius:8px;padding:10px 16px;transition:background .15s,border-color .15s}button:hover{border-color:var(--accent);background:var(--soft)}button:disabled{opacity:.4;cursor:default}button:focus-visible,summary:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #70ab96;outline-offset:3px}.primary{background:var(--accent);color:white;border-color:var(--accent)}.primary:hover{background:#104c3d;color:white}.muted{color:var(--muted)}.small{font-size:12px}p{margin:10px 0}h1,h2{font-family:"STSong","SimSun",serif;line-height:1.4}h1{font-size:23px;margin:0}h2{margin:0 0 18px;font-size:28px}[hidden]{display:none!important}
-header{max-width:1256px;margin:auto;display:flex;justify-content:space-between;align-items:center;padding:24px 30px;gap:20px;border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:14px;min-width:0}.mark{width:34px;height:38px;background:var(--accent);color:white;border-radius:2px 2px 12px 2px;text-align:center;font:24px/38px Georgia,serif;flex-shrink:0}.eyebrow{font:10px/1.4 Georgia,serif;letter-spacing:2px;color:var(--accent);margin-bottom:3px}#stats{font-size:12px;color:var(--muted);text-align:right;overflow-wrap:anywhere}#notice{max-width:1196px;margin:12px auto;padding:0 24px;color:var(--warn);font-size:14px}#notice:empty{display:none}
-main{max-width:1256px;margin:30px auto;padding:0 30px;display:grid;grid-template-columns:248px minmax(0,1fr);gap:36px;align-items:start}main>*,aside>*,select{min-width:0}aside{position:sticky;top:20px}summary{list-style:none;display:flex;justify-content:space-between;align-items:center;font-size:14px;font-weight:bold;padding:12px 0;border-bottom:1px solid var(--line)}summary::-webkit-details-marker{display:none}summary::after{content:'＋';font-size:18px;color:var(--accent)}details[open]>summary::after{content:'−'}.settingsBody{padding-top:8px}label{display:block;color:var(--muted);font-size:12px;margin:14px 0 6px}select,input[type=search]{width:100%;padding:10px 12px;background:var(--paper);border:1px solid var(--line);border-radius:8px}.actions{display:flex;gap:10px;flex-wrap:wrap}.tools{margin-top:20px}.tools button{flex:1;font-size:13px;white-space:nowrap}.backup{margin-top:18px}.backup>summary{font-size:12px;color:var(--muted)}.backup .actions{margin-top:12px}.backup button{font-size:12px;padding:7px 12px}.danger{color:var(--warn)}.legend{font-size:11px;color:var(--muted);margin-top:14px}.questionGrid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px;max-height:220px;overflow-y:auto;margin:14px 0}.questionGrid button{padding:4px 0;font:12px/1.9 Georgia,serif}.questionGrid button[data-grade=passed]{background:var(--soft);color:var(--accent)}.questionGrid button[data-grade=review],.questionGrid button[data-grade=partial]{background:#faeee3;color:var(--warn)}.questionGrid button[aria-current=true]{outline:2px solid var(--accent);outline-offset:-1px;font-weight:bold}
-.card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);overflow:clip;box-shadow:0 8px 32px #263b2a05}.questionBody{padding:32px 38px 26px}.meta{display:flex;gap:15px;justify-content:space-between;align-items:center;font-size:12px;color:var(--muted)}#stateLabel{font-size:11px;padding:3px 9px;background:var(--soft);color:var(--accent);border-radius:20px;margin:0;max-width:48%;text-align:center}progress{display:block;width:100%;height:3px;border:0;margin:18px 0 28px;accent-color:var(--accent);background:var(--soft)}progress::-webkit-progress-bar{background:var(--soft)}progress::-webkit-progress-value{background:var(--accent)}.sectionLabel{font:11px/1.5 Georgia,serif;letter-spacing:2px;color:var(--muted)}#question{font-family:"STSong","SimSun",serif;font-size:27px;font-weight:bold;line-height:1.65;white-space:pre-wrap;overflow-wrap:anywhere;margin:12px 0 18px}#hint{font-size:13px;color:var(--muted);margin-bottom:22px}.draftBox{margin:18px 0}.draftBox summary{justify-content:flex-start;gap:20px;font-size:13px;color:var(--muted);border:0;padding:0}.draftBox summary::after{font-size:15px}textarea{display:block;width:100%;min-height:140px;margin-top:14px;border:1px solid var(--line);border-radius:8px;padding:15px;background:#fafaf5;resize:vertical;line-height:1.8}.revealRow{margin-top:24px}.key{font:11px/1.6 Georgia,serif;color:var(--muted);align-self:center}.answerArea{border-top:1px solid var(--line);padding:28px 38px;background:#f6f8f2}.answerHead{display:flex;justify-content:space-between;align-items:center;gap:15px;color:var(--accent);font-size:13px}.textButton{background:none;border:0;padding:3px 0;color:var(--muted);font-size:12px}#answer{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.95;font-size:16px;margin-top:16px}#criteriaTitle{font-size:12px;color:var(--accent);margin:24px 0 8px}#criteria{padding-left:20px;margin:0;font-size:14px}#criteria li{margin:5px 0}.grading{margin-top:24px;border-top:1px solid var(--line);padding-top:18px}.grading p{font-size:12px;color:var(--muted);margin:0 0 10px}.gradeButtons{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.gradeButtons button{padding:10px 6px;font-size:14px}.gradeButtons button[aria-pressed=true]{outline:2px solid var(--accent);outline-offset:1px}#gradeFeedback{color:var(--accent);font-size:12px;min-height:22px;margin:8px 0 0}.navigation{display:flex;justify-content:space-between;gap:12px;padding:18px 38px;border-top:1px solid var(--line);background:var(--paper)}.navigation button{min-width:105px}.footerNote{color:var(--muted);font-size:11px;margin:16px 0;text-align:center}#complete{padding:44px 38px}.completeMark{font:48px/1.4 Georgia,serif;color:var(--accent);margin-bottom:22px}#summary{font-size:17px;line-height:2;margin:18px 0}#complete .actions{margin-top:24px}
-@media(max-width:860px){header{padding:18px 20px}main{grid-template-columns:minmax(0,1fr);margin:16px auto;padding:0 16px;gap:14px}aside{position:static;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:0 16px}#settings>summary{border:0;padding:12px 0}.settingsBody{border-top:1px solid var(--line);padding-bottom:18px}.filters{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}.searchField{grid-column:1/-1}.questionBody{padding:24px}.answerArea{padding:24px}.navigation{padding:14px 24px;position:sticky;bottom:0;box-shadow:0 -8px 18px #263b2a06}.card{overflow:visible}#question{font-size:24px}.key{display:none}#stats{max-width:54%;font-size:11px}.brand{gap:9px}h1{font-size:20px}.eyebrow{font-size:9px;letter-spacing:1px}#stateLabel{max-width:45%}.questionGrid{grid-template-columns:repeat(10,minmax(0,1fr))}#complete{padding:28px 24px}}
-@media(max-width:420px){header{padding:14px 16px;gap:12px}.mark{display:none}.eyebrow{font-size:8px}main{padding:0 10px}.questionBody,.answerArea{padding:22px 20px}.meta{font-size:11px;gap:10px}#question{font-size:23px}.gradeButtons button{font-size:13px}.navigation{padding:12px 20px}.navigation button{padding:9px 12px;min-width:88px}.questionGrid{grid-template-columns:repeat(8,minmax(0,1fr))}}
+:root{color-scheme:light;--bg:#f5f7fa;--paper:#fff;--text:#1d2939;--muted:#667085;--line:#e4e7ec;--accent:#2459c4;--soft:#edf3ff;--warn:#a54b17;--radius:14px}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.7 system-ui,sans-serif;-webkit-text-size-adjust:100%}
+button,input,select,textarea,h1,h2,h3,summary,.sectionLabel,.eyebrow,.key,.questionGrid button{font-family:inherit}
+button,input,select,textarea{font-size:14px;color:inherit}
+button,select,summary{cursor:pointer}
+button{border:1px solid #d0d5dd;border-radius:8px;background:#fff;padding:10px 16px;line-height:1.5;font-weight:500;transition:background .12s,border-color .12s}
+button:hover{background:#f8fafc;border-color:#98a2b3}
+button:disabled{opacity:.4;cursor:default}
+.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.primary:hover{background:#19499f;border-color:#19499f;color:#fff}
+:focus-visible{outline:3px solid #91b4ff;outline-offset:3px}
+[hidden]{display:none!important}
+p{margin:10px 0}h1,h2,h3{line-height:1.5;color:var(--text)}
+h1{font-size:21px;font-weight:650;margin:0;letter-spacing:0}
+h2{font-size:23px;margin:0 0 14px}h3{font-size:18px;margin:22px 0 10px}
+.small{font-size:13px}.muted{color:var(--muted)}
+header{max-width:1220px;padding:24px 24px 18px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.brand{display:flex;align-items:center;gap:12px;min-width:0}.brand>div{min-width:0}
+.mark{display:none}.eyebrow{font-size:12px;line-height:1.5;letter-spacing:0;color:var(--muted);margin-bottom:2px}
+#stats{font-size:13px;color:var(--muted);line-height:1.8;text-align:right;font-variant-numeric:tabular-nums;max-width:50%}
+#notice{max-width:1172px;margin:0 auto 12px;padding:0 24px;color:var(--warn);font-size:14px}#notice:empty{display:none}
+main{max-width:1220px;margin:0 auto 32px;padding:0 24px;display:grid;grid-template-columns:264px minmax(0,1fr);gap:24px;align-items:start}
+main>*,aside>*,select{min-width:0}
+aside{position:sticky;top:18px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:0 18px;max-height:calc(100vh - 36px);overflow-y:auto;scrollbar-width:thin}
+summary{list-style:none;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:13px 0;font-size:14px;font-weight:600;line-height:1.6}
+summary::-webkit-details-marker{display:none}
+summary::after{content:'⌄';font-size:18px;font-weight:400;color:#667085;flex-shrink:0}
+details[open]>summary::after{content:'⌃'}
+#settings>summary{font-size:15px;padding:17px 0}
+.settingsBody{padding:0 0 18px;border-top:1px solid var(--line)}
+#guidedStart{width:100%;margin:4px 0 2px}
+label{display:block;font-size:13px;color:#475467;margin:14px 0 6px}
+select,input[type=search]{width:100%;min-height:42px;border:1px solid #d0d5dd;border-radius:8px;background:white;padding:9px 10px}
+.actions{display:flex;gap:8px;flex-wrap:wrap}.tools{margin-top:16px}.tools button{flex:1;padding:9px 10px;font-size:13px;white-space:nowrap}
+.numberNav,.backup{border-top:1px solid var(--line);margin-top:16px}.backup .actions{margin-top:2px}.backup button{font-size:13px;padding:8px 10px}.danger{color:var(--warn)}
+.legend{font-size:12px;color:var(--muted);margin:0 0 8px}
+.questionGrid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px;max-height:250px;overflow-y:auto;padding:2px;margin-bottom:10px}
+.questionGrid button{padding:6px 0;font-size:12px;line-height:1.4;font-variant-numeric:tabular-nums}
+.questionGrid button[data-grade=passed]{background:var(--soft);color:var(--accent);border-color:#c7d7fb}
+.questionGrid button[data-grade=review],.questionGrid button[data-grade=partial]{background:#fff3e9;color:var(--warn);border-color:#f2d1b5}
+.questionGrid button[aria-current=true]{outline:2px solid var(--accent);outline-offset:-2px;font-weight:700}
+.card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:clip;box-shadow:0 2px 5px #10182803}
+.questionBody{padding:28px 32px}
+.meta{display:flex;gap:12px;justify-content:space-between;align-items:flex-start;font-size:13px;color:var(--muted)}
+#position{max-width:65%;line-height:1.7}
+#stateLabel{font-size:12px;margin:0;max-width:40%;line-height:1.6;text-align:right;color:var(--muted)}
+progress{display:block;width:100%;height:4px;border:0;margin:16px 0 24px;accent-color:var(--accent);background:#eef2f6;border-radius:4px;overflow:hidden}
+progress::-webkit-progress-bar{background:#eef2f6}progress::-webkit-progress-value{background:var(--accent)}
+.sectionLabel{font-size:13px;font-weight:600;letter-spacing:0;color:var(--accent);line-height:1.6}
+#question{font-size:18px;font-weight:400;line-height:1.9;overflow-wrap:anywhere;margin:10px 0 12px}
+.questionTitle{font-size:22px;font-weight:650;line-height:1.5;margin:0 0 16px;white-space:normal}
+.questionPrompt{white-space:pre-wrap}
+#hint{font-size:13px;color:var(--muted);margin:12px 0 20px;line-height:1.8}
+.learningPanel{border:1px solid var(--line);border-radius:10px;background:#fafbfd;padding:14px 18px;margin:20px 0}
+.learningPanel>.sectionLabel{font-size:14px;color:#344054}
+#stageLine{color:var(--muted);font-size:12px;margin:4px 0 10px;line-height:1.7}
+.learningPanel details+details{border-top:1px solid var(--line)}
+.learningPanel summary{color:#344054;padding:11px 0}
+.reading{white-space:pre-line;overflow-wrap:anywhere;font-size:16px;line-height:1.9;color:#344054}
+.reading h3{font-size:17px;white-space:normal;margin:20px 0 8px;font-weight:650}
+.reading h3:first-child{margin-top:6px}
+.route{font-size:14px;line-height:1.8;background:#eef3fb;border-radius:8px;padding:12px;margin:12px 0 14px}
+#readingBox[open]{padding-bottom:14px}
+#error{font-size:14px;line-height:1.8;margin:0 0 14px;color:#7a3e15}
+.learningPanel>p:last-child{font-size:12px;color:var(--muted);margin:10px 0 0;line-height:1.8}
+.draftBox{margin:20px 0 0}.draftBox summary{justify-content:flex-start;gap:10px;color:#475467;font-size:14px}
+textarea{width:100%;min-height:150px;border:1px solid #d0d5dd;border-radius:8px;background:#fff;resize:vertical;padding:12px;line-height:1.8;margin-top:8px}
+.revealRow{margin-top:20px;align-items:center}.key{font-size:12px;color:var(--muted)}
+.revealRow:has(#reveal[hidden]){display:none}
+.answerArea{padding:28px 32px;background:#f8faff;border-top:1px solid #dbe5f7}
+.answerHead{display:flex;justify-content:space-between;gap:16px;align-items:center;font-size:16px;color:var(--text);margin-bottom:8px}
+.textButton{background:none;border:0;padding:5px 0;color:var(--accent);font-size:13px}.textButton:hover{background:none;color:#19499f}
+#answer{white-space:pre-line;font-size:17px;line-height:1.95;overflow-wrap:anywhere;margin-top:18px}
+#criteriaTitle{font-size:14px;font-weight:600;margin:24px 0 8px;color:var(--text)}
+#criteria{font-size:14px;line-height:1.85;padding-left:22px;margin:0}#criteria li{margin:4px 0}
+.grading{border-top:1px solid #dbe5f7;padding-top:18px;margin-top:22px}.grading p{font-size:13px;color:var(--muted);margin:0 0 12px}
+.gradeButtons{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.gradeButtons button{font-size:14px;padding:10px 4px;background:#fff}
+.gradeButtons button[aria-pressed=true]{background:var(--soft);border-color:var(--accent);color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+#gradeFeedback{font-size:13px;color:var(--accent);min-height:20px;margin:10px 0 0}
+.navigation{display:flex;justify-content:space-between;gap:12px;border-top:1px solid var(--line);padding:18px 32px;background:#fff;position:static}
+.navigation button{min-width:108px}
+.footerNote{font-size:12px;text-align:center;line-height:1.8;color:var(--muted);margin:16px 0}
+#complete{padding:36px 32px}.completeMark{font-size:36px;color:var(--accent);line-height:1.3;margin-bottom:16px}#summary{line-height:1.9;margin:16px 0}#complete .actions{margin-top:20px}
+.mathDisplay{overflow-x:auto;max-width:100%;padding:12px 2px;white-space:normal;overscroll-behavior-x:contain;scrollbar-width:thin}
+.mathDisplay math{display:block;min-width:max-content;margin:auto}
+.mathInline{display:inline-block;max-width:100%;overflow-x:auto;vertical-align:middle;white-space:normal;scrollbar-width:thin}
+math{font-family:math;font-size:1em}#question math{font-size:1em}
+math mtext{font-family:system-ui,sans-serif}
+@media(max-width:960px){main{grid-template-columns:236px minmax(0,1fr);gap:18px}.questionBody,.answerArea{padding:24px}.navigation{padding:16px 24px}}
+@media(max-width:760px){header{padding:20px 16px 14px;display:block}.eyebrow{display:none}h1{font-size:21px}#stats{max-width:none;text-align:left;font-size:12px;margin-top:5px}main{display:block;padding:0 12px;margin-bottom:20px}aside{position:static;max-height:none;padding:0 16px;margin-bottom:12px;overflow:visible}#settings>summary{padding:13px 0}.settingsBody{padding-bottom:16px}.filters{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}.searchField{grid-column:1/-1}.questionGrid{grid-template-columns:repeat(8,minmax(0,1fr));max-height:180px}.questionBody,.answerArea{padding:22px 20px}.questionTitle{font-size:21px}#question{font-size:17px}.learningPanel{padding:12px 14px}.navigation{padding:16px 20px}.key{display:none}.reading{font-size:16px}#answer{font-size:16px}.meta{font-size:12px}#stateLabel{font-size:12px;max-width:40%}#position{max-width:60%}.footerNote{font-size:11px;padding:0 8px}}
+@media(max-width:360px){header{padding:16px 14px 12px}main{padding:0 8px}.questionBody,.answerArea{padding:20px 16px}.questionTitle{font-size:20px}.learningPanel{padding:10px 12px}.learningPanel summary{font-size:13px}.gradeButtons button{font-size:13px}.navigation{padding:14px 16px}.navigation button{min-width:100px;padding:9px 12px}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+
 </style>
 </head>
 <body>
-<header><div class="brand"><span class="mark" aria-hidden="true">s</span><div><div class="eyebrow">STUDY FAST / PRACTICE</div><h1>__QUIZ_TITLE__</h1></div></div><div id="stats" aria-live="polite"></div></header>
+<header><div class="brand"><span class="mark" aria-hidden="true">s</span><div><div class="eyebrow">循序学习 · 自主练习</div><h1>__QUIZ_TITLE__</h1></div></div><div id="stats" aria-live="polite"></div></header>
 <div id="notice" role="status"></div>
 <main>
-<aside><details id="settings"><summary>练习设置与题目导航</summary><div class="settingsBody">
+<aside><details id="settings"><summary>学习设置</summary><div class="settingsBody"><button id="guidedStart" class="primary">按顺序开始</button>
 <div class="filters"><div class="searchField"><label for="search">查找题目</label><input id="search" type="search" placeholder="输入题目关键词" autocomplete="off"></div>
 <div><label for="category">分类</label><select id="category"><option value="">全部分类</option></select></div>
 <div><label for="filter">练习范围</label><select id="filter"><option value="all">全部题目</option><option value="unseen">未评题目</option><option value="review">需复习 / 基本会</option><option value="passed">自评通过</option></select></div>
 <div><label for="order">出题顺序</label><select id="order"><option value="sequential">顺序</option><option value="random">随机</option></select></div></div>
 <div class="actions tools"><button id="restart">新一轮</button><button id="wrongOnly">错题重练</button></div>
-<p class="legend">题号导航 · 绿：通过　橙：待复习</p><nav id="questionGrid" class="questionGrid" aria-label="本轮题号"></nav>
+<details class="numberNav"><summary>题号导航</summary><p class="legend">题号导航 · 绿：通过　橙：待复习</p><nav id="questionGrid" class="questionGrid" aria-label="本轮题号"></nav></details>
 <details class="backup"><summary>进度备份与管理</summary><div class="actions"><button id="export">导出进度</button><button id="import">导入进度</button><button id="reset" class="danger">清空进度</button></div></details>
 <input id="importFile" type="file" accept=".json,application/json" hidden>
 </div></details></aside>
 <div><section class="card">
 <div id="session"><div class="questionBody"><div class="meta"><div id="position"></div><p id="stateLabel"></p></div><progress id="progress" max="1" value="0" aria-label="本轮自评进度"></progress>
-<div class="sectionLabel">QUESTION / 独立作答</div><div id="question" tabindex="-1"></div><p id="hint">先想清楚，再看答案。可以口述，也可以展开草稿写下来。</p>
+<div class="sectionLabel">当前练习</div><h2 id="questionTitle" class="questionTitle" hidden></h2><div id="question" tabindex="-1"></div><p id="hint">先想清楚，再看答案。可以口述，也可以展开草稿写下来。</p>
+<section id="learningPanel" class="learningPanel" hidden><div class="sectionLabel">学习帮助</div>
+<details id="conceptBox" hidden><summary>核心概念</summary><div id="concept" class="reading"></div><p id="methodRow" class="route" hidden><strong>动笔顺序：</strong><span id="method"></span></p></details>
+<details id="readingBox" hidden><summary>知识讲解与例题</summary><div id="explanation" class="reading"></div><h3 id="exampleTitle" hidden>示范例题</h3><div id="example" class="reading"></div></details>
+<details id="errorBox" hidden><summary>易错提醒</summary><p id="error"></p></details>
+<p class="small muted">需要时展开讲解；重做时先独立作答。</p></section>
 <details id="draftBox" class="draftBox"><summary>写下我的答案</summary><label for="draft" class="small">草稿仅在当前页面暂存，刷新后清空。</label><textarea id="draft" placeholder="写下你的思路、关键步骤或口述提纲……"></textarea></details>
 <div class="actions revealRow"><button id="reveal" class="primary">查看参考答案</button><span class="key">空格揭晓 · ← → 切题</span></div></div>
 <div id="solution" class="answerArea" hidden><div class="answerHead"><strong>参考答案</strong><button id="hideAnswer" class="textButton">收起，再想一遍 ↑</button></div><div id="answer"></div><p id="criteriaTitle">作答要点</p><ul id="criteria"></ul>
 <div class="grading"><p>对照要点，给这一次作答一个评价</p><div class="gradeButtons"><button data-grade="review" aria-pressed="false">还需复习</button><button data-grade="partial" aria-pressed="false">基本会了</button><button data-grade="passed" aria-pressed="false">自评通过</button></div><p id="gradeFeedback" role="status"></p></div></div>
 <div class="navigation"><button id="prev">← 上一题</button><button id="next">跳过此题 →</button></div></div>
-<div id="complete" hidden><div class="completeMark" aria-hidden="true">✓</div><div class="sectionLabel">SESSION / 本轮回顾</div><h2>这一轮，练得怎么样？</h2><p id="summary"></p><p class="muted">统计只计本轮自评，跳过的题仍记为未评。</p><div class="actions"><button id="again" class="primary">再练一轮</button><button id="reviewAgain">复习薄弱题</button></div></div>
+<div id="complete" hidden><div class="completeMark" aria-hidden="true">✓</div><div class="sectionLabel">本轮回顾</div><h2>这一轮，练得怎么样？</h2><p id="summary"></p><p class="muted">统计只计本轮自评，跳过的题仍记为未评。</p><div class="actions"><button id="again" class="primary">再练一轮</button><button id="reviewAgain">复习薄弱题</button></div></div>
 </section><p class="footerNote">离线单文件 · 自评不等于客观评分 · 进度自动保存在此浏览器</p></div>
 </main>
 <script id="quiz-data" type="application/json">__QUIZ_DATA__</script>
@@ -48,7 +138,7 @@ const byId=new Map(bank.questions.map(q=>[q.id,q]));
 const key='study-fast-quiz-v1:'+bank.bank_id;
 const grades=['review','partial','passed'];
 const $=id=>document.getElementById(id);
-const fingerprint=q=>JSON.stringify([q.question,q.answer,q.criteria||[]]);
+const fingerprint=q=>JSON.stringify(q.title?[q.question,q.answer,q.criteria||[],q.title]:[q.question,q.answer,q.criteria||[]]);
 let records=Object.create(null),queue=[],cursor=0;
 let round=Object.create(null),drafts=Object.create(null);
 function notify(message){$('notice').textContent=message;}
@@ -89,7 +179,19 @@ function render(){
   const q=byId.get(queue[cursor]);
   $('position').textContent=`${q.category} · 第 ${cursor+1} / ${queue.length} 题`;
   $('progress').max=queue.length;$('progress').value=queue.filter(id=>round[id]).length;
+  $('questionTitle').hidden=!q.title;$('questionTitle').textContent=q.title||'';
   $('question').textContent=q.question;$('answer').textContent=q.answer;
+  const learning=q.learning||{};
+  $('learningPanel').hidden=!q.learning;
+  $('conceptBox').hidden=!(learning.concept||learning.method);
+  $('concept').textContent=learning.concept||'';
+  $('methodRow').hidden=!learning.method;$('method').textContent=learning.method||'';
+  $('readingBox').hidden=!(learning.explanation||learning.example);
+  $('explanation').textContent=learning.explanation||'';
+  $('exampleTitle').hidden=!learning.example;$('example').textContent=learning.example||'';
+  $('errorBox').hidden=!learning.pitfalls;$('error').textContent=learning.pitfalls||'';
+  for(const id of ['conceptBox','readingBox','errorBox'])$(id).open=false;
+  $('hint').textContent=q.learning?'先独立写出步骤，需要时展开下方讲解；对照答案后再合上重做。':'先独立作答，再核对参考答案与要点。';
   $('criteria').replaceChildren();
   for(const c of q.criteria||[]){const li=document.createElement('li');li.textContent=c;$('criteria').appendChild(li);}
   $('criteriaTitle').hidden=!(q.criteria||[]).length;
@@ -125,7 +227,8 @@ function previous(){if(cursor>0){rememberDraft();cursor--;render();}}
 for(const cat of new Set(bank.questions.map(q=>q.category))){const option=document.createElement('option');option.value=cat;option.textContent=cat;$('category').appendChild(option);}
 for(const id of ['category','filter','order'])$(id).addEventListener('change',start);
 $('search').addEventListener('input',start);
-$('settings').open=typeof matchMedia==='function'?matchMedia('(min-width:861px)').matches:true;
+$('settings').open=typeof matchMedia==='function'?matchMedia('(min-width:761px)').matches:true;
+$('guidedStart').onclick=()=>{$('category').value='';$('filter').value='all';$('order').value='sequential';$('search').value='';start();if(typeof matchMedia==='function'&&!matchMedia('(min-width:761px)').matches)$('settings').open=false;$('question').scrollIntoView?.({block:'center',behavior:'instant'});};
 $('restart').onclick=start;$('again').onclick=start;$('reveal').onclick=reveal;$('prev').onclick=previous;$('next').onclick=next;
 $('hideAnswer').onclick=hideAnswer;
 $('wrongOnly').onclick=()=>{$('filter').value='review';start();};

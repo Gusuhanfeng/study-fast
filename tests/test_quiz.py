@@ -41,10 +41,28 @@ class QuizTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             quiz.validate(self.bank)
 
+    def test_optional_teaching_fields_and_legacy_configuration(self):
+        legacy = copy.deepcopy(self.bank)
+        for question in legacy['questions']:
+            question.pop('title', None)
+            question.pop('learning', None)
+        quiz.validate(legacy)
+        for value in ({}, {'concept': ''}, {'unknown': 'text'}, {'example': []}, []):
+            data = copy.deepcopy(self.bank)
+            data['questions'][0]['learning'] = value
+            with self.subTest(value=value), self.assertRaises(ValueError):
+                quiz.validate(data)
+        data = copy.deepcopy(self.bank)
+        data['questions'][0]['title'] = ' '
+        with self.assertRaises(ValueError):
+            quiz.validate(data)
+
     def test_script_injection_stays_data(self):
         malicious = '</script><script>alert(1)</script><img src=x onerror=alert(2)>'
         self.bank['title'] = malicious
         self.bank['questions'][0]['answer'] = malicious
+        self.bank['questions'][0]['title'] = malicious
+        self.bank['questions'][0]['learning']['example'] = malicious
         rendered = quiz.render(self.bank)
         self.assertNotIn(malicious, rendered)
         self.assertIn('\\u003c/script\\u003e', rendered)
@@ -80,6 +98,15 @@ const get=id=>elements[id]??=el();get('quiz-data').textContent=data;get('filter'
 const saved={};const context=vm.createContext({document:{getElementById:get,createElement:el,querySelectorAll:()=>[],addEventListener(){}},localStorage:{getItem:k=>saved[k]||null,setItem:(k,v)=>saved[k]=v},confirm:()=>true});
 vm.runInContext(script,context);const run=s=>vm.runInContext(s,context);
 assert.equal(run('queue.length'),2);assert.equal(get('solution').hidden,true);
+assert.equal(get('learningPanel').hidden,false);assert.equal(get('conceptBox').open,false);
+assert.ok(get('concept').textContent.length>0);assert.equal(get('questionTitle').hidden,false);
+get('conceptBox').open=true;run('next()');assert.equal(get('learningPanel').hidden,true);
+assert.equal(get('questionTitle').hidden,true);run('previous()');assert.equal(get('conceptBox').open,false);
+// Data in titles and teaching fields stays literal, never interpreted as markup.
+run('bank.questions[0].learning.example="<img src=x onerror=alert(1)>";render()');
+assert.equal(get('example').textContent,'<img src=x onerror=alert(1)>');
+// A title-free legacy record still uses its original three-part fingerprint.
+assert.equal(run('Object.keys(restore({version:1,bank_id:bank.bank_id,records:[{id:bank.questions[1].id,grade:"passed",fingerprint:JSON.stringify([bank.questions[1].question,bank.questions[1].answer,bank.questions[1].criteria||[]])}]})).length'),1);
 run('grade("passed")');assert.equal(run('Object.keys(records).length'),0);
 run('next()');assert.equal(run('stats(queue).unseen'),2); // skipping is not passing
 run('previous();reveal();grade("review")');assert.equal(run('stats(queue).review'),1);
@@ -95,6 +122,8 @@ run('start()');assert.equal(run('queue.length'),0); // no stale passed item in r
 get('filter').value='all';get('category').value='方法与应用';run('start()');assert.equal(run('queue.length'),1);
 get('category').value='';get('order').value='random';run('start()');assert.equal(run('new Set(queue).size'),2);
 run('bank.questions.reverse();records=restore(snapshot())');assert.equal(run('Object.keys(records).length'),1); // stable IDs survive reordering
+run('bank.questions.find(q=>q.id==="concept-01").title="changed";records=restore(snapshot())');assert.equal(run('Object.keys(records).length'),0);
+run('jump(queue.findIndex(id=>id==="concept-01"));reveal();grade("passed")');
 run('bank.questions.find(q=>q.id==="concept-01").answer="revised";records=restore(snapshot())');assert.equal(run('Object.keys(records).length'),0);
 assert.throws(()=>run('restore({version:1,bank_id:"other",records:[]})'));
 assert.throws(()=>run('restore({version:1,bank_id:bank.bank_id,records:{}})'));

@@ -8,7 +8,7 @@ Contributions should preserve the skill's evidence boundaries, privacy guarantee
 2. Make focused changes and update the relevant reference instead of duplicating rules in `SKILL.md`.
 3. Add tests for observable behavior and failure boundaries.
 4. Run `python scripts/self_check.py` and `python -m unittest discover -s tests -v`.
-5. For layout changes, generate a sample pack, audit every DOCX, render every page, and inspect the PNGs.
+5. For Word layout changes, generate a sample pack, audit every DOCX, render every page, and inspect the PNGs. For HTML-only layout changes, generate a synthetic quiz and inspect it in an offline browser at desktop, landscape and narrow portrait sizes; verify system fonts, overflow, teaching panels, navigation and progress. Unchanged Word output does not need to be regenerated for an HTML-only change.
 
 Do not add real resumes, employer documents, meeting links, credentials, customer data, unpublished research data, or generated private artifacts as fixtures. Use synthetic examples and reserved domains such as `example.com`.
 

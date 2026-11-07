@@ -20,6 +20,8 @@ description: Build an evidence-grounded learning handbook and connected explanat
 
 用户要求网页刷题、交互自测或离线刷题时，启用可选 `interactive_quiz` 模块，读取 [交互刷题](references/interactive-quiz.md)。交付为单个自包含 HTML，所有题库和资源内嵌，无附带文件或联网依赖。它可独立生成，也可随 Word 文档附加；默认不生成，不占五种 Word 文档类型，不要求 `practice_needed=true`。只要求 HTML 时不生成 Word。该模块使用内部题库 JSON 和独立生成器，不把 HTML 配置传给 `build_pack.py`。
 
+HTML 默认使用设备系统字体和题目优先的响应式布局，学习帮助按需展开；不把 Word 的宋体、Times New Roman 规则套到网页。细节与可选教学字段见交互刷题契约。
+
 读取 [输出契约](references/output-contract.md)；核心文档另读 [学习设计](references/learning-design.md)，题库、模拟卷或面试实操另读 [应试与实操](references/assessment-design.md)。
 
 ## 材料、范围与证据
